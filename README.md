@@ -1,6 +1,6 @@
 # The Rolobot Archive
 
-Six doors. One ending. The keys are hidden on the page, in your server, and out in the world.
+Six doors. One ending. The keys are hidden on the page and out in the world.
 
 **Enter:** https://juancorrea10.github.io/rolobot-archive/
 

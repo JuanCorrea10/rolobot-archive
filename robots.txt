@@ -1,4 +1,4 @@
 # The Rolobot Archive
-# Keepers: you may look at the doors. You may not open the one below.
+# Nothing for you here, keepers. The doors are for people.
 User-agent: *
-Disallow: /rolobot-archive/vault/the-door-you-were-told-not-to-open.html
+Disallow: /rolobot-archive/d/

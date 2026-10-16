@@ -44,6 +44,7 @@
   // ---------- helpers ----------
   var ROOT = document.documentElement.getAttribute('data-root') || './';
   var ROMAN = ['0','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+  var LAST = 7, ENDLEVEL = 8;
   var S = {
     get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
     set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
@@ -62,12 +63,12 @@
     'There are 10 kinds of people: those who understand binary, and those who do not.',
     'I would tell you a UDP joke, but you might not get it.',
     'A SQL query walks into a bar, walks up to two tables and asks: "Can I join you?"',
-    'Why was the JavaScript developer sad? Because he did not Node how to Express himself.',
     'Knock knock. - Who is there? - ...(very long pause)... - Java.',
-    '!false. It is funny because it is true.',
     'Why did the robot go on holiday? It needed to recharge.',
     'How many programmers does it take to change a light bulb? None. That is a hardware problem.',
-    'A programmer was found dead in the shower. Next to the body: a shampoo bottle that said "Lather. Rinse. Repeat."',
+    'What is Beethoven doing in his grave? De-composing.',
+    'Why did the composer only write in bed? He was working on sheet music.',
+    'What is Beethoven\'s favourite fruit? Ba-na-na-naaaa.',
     'Why do ghosts make bad liars? Because you can see right through them.',
     'What do you call a detective who solves cases with a keyboard? Sherlock Homes-page.'
   ];
@@ -82,7 +83,7 @@
   ];
   var EGGS = {
     rolobot: '...yes?',
-    help: 'There is no help here. There are hints, though. Ask for one.',
+    help: 'There is no help here. There are hints, though. Type hint.',
     sos: 'Received. Ignored.',
     '42': 'That is the answer. Not to this door, though.',
     password: 'Really? That was the plan?',
@@ -93,7 +94,7 @@
     opensesame: 'Wrong cave.',
     xyzzy: 'Nothing happens.',
     plugh: 'A hollow voice says: "fool".',
-    cheat: 'The key is on the page, under the page, or out in the world. Not in this box.',
+    cheat: 'The key is on the page, in your server, or out in the world. Not in this box.',
     skip: 'There is no skipping. There is only looking.',
     answer: 'Clever. No.',
     solution: 'Clever. No.',
@@ -104,27 +105,50 @@
     whoisrolobot: 'Nobody knows. Rolobot prefers it that way.',
     key: 'Yes. That is what I need. Not the word "key". A key.',
     nothing: 'Nothing is not a key. Usually.',
-    idk: 'Then look harder.',
-    idontknow: 'Then look harder.',
+    idk: 'Then look harder. Or type hint.',
+    idontknow: 'Then look harder. Or type hint.',
     love: 'Not a key. But thank you.',
     claude: 'Ask the machines if you want. They do not know either.',
     chatgpt: 'Ask the machines if you want. They do not know either.',
     ai: 'Ask the machines if you want. They do not know either.',
     google: 'Allowed. Encouraged, even. But type what you find, not the word google.',
+    youtube: 'Yes. Watch there. Then come back.',
+    spotify: 'Yes. Listen there. Then come back.',
+    wikipedia: 'Yes. Read there. Then come back.',
+    discord: 'Yes. Look there. Then come back.',
     rickroll: 'Never gonna give you a key.',
     rick: 'Never gonna let you through.',
     reset: 'Type "reset please" if you really want the archive to forget you.',
-    up: 'Up is not a key.',
-    down: 'Down is not a key either.',
     test: 'Test failed.',
-    asdf: 'The keyboard is not the key. Well. Not this time.',
+    asdf: 'The keyboard is not the key.',
     thanks: 'You are welcome. Still locked.',
     thankyou: 'You are welcome. Still locked.',
     bye: 'The door will be here when you come back.',
     door: 'Yes, that is what you are looking at.',
-    light: 'Flickers.'
+    light: 'Flickers.',
+    askew: 'Close. Google knows a shorter word for that one. Four letters.',
+    beethoven: 'He wrote it. But the piece has its own name.',
+    symphony: 'That is the symphony. The famous bit inside it has a name of its own.',
+    ninthsymphony: 'That is the symphony. The famous bit inside it has a name of its own.',
+    symphony9: 'That is the symphony. The famous bit inside it has a name of its own.',
+    himnodelaalegria: 'In English, please. The archive is monolingual. Stubbornly.',
+    damdominici: 'Ah. The architect. His music is on Spotify, you know. Two tracks, so far.',
+    dominici: 'Ah. The architect. His music is on Spotify, you know. Two tracks, so far.',
+    ascensionprotocol: 'The other one.',
+    ascension: 'The other one.',
+    protocol: 'The other one.',
+    julius: 'He joined quietly. He will not answer you. His profile will.',
+    juliusvii: 'He joined quietly. He will not answer you. His profile will.',
+    julius7: 'He joined quietly. He will not answer you. His profile will.',
+    caesar: 'Julius, to his friends. He shifts things.',
+    nobody: 'Somebody, surely.',
+    me: 'Not a key. Though you are important, probably.',
+    zoo: 'Warmer. Who lives there?'
   };
   window.RA = { JOKES: JOKES, sha256: sha256, norm: norm };
+
+  // ---------- new version of the archive: old progress means nothing ----------
+  if (S.get('ra_v') !== '2') { forget(); S.set('ra_v', '2'); }
 
   // ---------- the tab misses you ----------
   var savedTitle = document.title;
@@ -141,39 +165,38 @@
     else kp = (k === KON[0]) ? 1 : 0;
   });
 
-  // ---------- console greeting (door III has its own voice) ----------
-  if (!(window.DOOR && window.DOOR.level === 3)) {
-    console.log('%cRolobot sees you.', 'color:#d9a441;font-family:monospace;font-size:13px');
-  }
+  console.log('%cRolobot sees you.', 'color:#d9a441;font-family:monospace;font-size:13px');
 
   // ---------- index: progress + the ghost ink ----------
   var prog = document.getElementById('progress');
   if (prog) {
     var mx = +S.get('ra_max') || 0, last = S.get('ra_last') || '';
     var safe = last && (last.indexOf(location.origin) === 0 || last.indexOf('file:') === 0);
-    if (mx >= 12 && safe) prog.innerHTML = 'You already looked closer. <a href="' + last + '">Return to the end</a>, or <a href="#" id="reset">make the archive forget you</a>.';
+    if (mx >= ENDLEVEL && safe) prog.innerHTML = 'You already got out. <a href="' + last + '">Return to the end</a>, or <a href="#" id="reset">make the archive forget you</a>.';
     else if (mx >= 1 && safe) prog.innerHTML = 'You stand before door ' + ROMAN[mx] + '. <a href="' + last + '">Continue &rarr;</a>';
     var rs = document.getElementById('reset');
     if (rs) rs.addEventListener('click', function (e) { e.preventDefault(); forget(); prog.textContent = 'Forgotten.'; });
   }
   var ghost = document.querySelector('.ghost');
-  if (ghost) setTimeout(function () { ghost.classList.add('faint'); }, 25000);
+  if (ghost) setTimeout(function () { ghost.classList.add('faint'); }, 15000);
 
   function forget() {
-    for (var i = 1; i <= 12; i++) S.del('ra_key_' + i);
+    for (var i = 1; i <= ENDLEVEL; i++) S.del('ra_key_' + i);
     S.del('ra_max'); S.del('ra_last'); S.del('ra_start');
   }
 
   // ---------- doors ----------
   var D = window.DOOR;
   if (!D) return;
-  var max = +S.get('ra_max') || 0;
-  if (D.level >= max) { S.set('ra_max', String(D.level)); S.set('ra_last', location.href.split('?')[0].split('#')[0]); }
-  if (D.level === 1 && !S.get('ra_start')) S.set('ra_start', String(Date.now()));
+  if (!D.side) {
+    var max = +S.get('ra_max') || 0;
+    if (D.level >= max) { S.set('ra_max', String(D.level)); S.set('ra_last', location.href.split('?')[0].split('#')[0]); }
+    if (D.level === 1 && !S.get('ra_start')) S.set('ra_start', String(Date.now()));
+  }
 
   function keyring() {
     var ks = [];
-    for (var i = 1; i <= 11; i++) { var k = S.get('ra_key_' + i); if (k) ks.push(ROMAN[i] + ': ' + k); }
+    for (var i = 1; i <= LAST; i++) { var k = S.get('ra_key_' + i); if (k) ks.push(ROMAN[i] + ': ' + k); }
     return ks;
   }
 
@@ -196,7 +219,7 @@
     e.preventDefault();
     var v = norm(input.value);
     if (!v) { say('Silence is not a key.'); return; }
-    if (v === 'hint' || v === 'hints' || v === 'pista' || v === 'clue') {
+    if (v === 'hint' || v === 'hints' || v === 'pista' || v === 'clue' || v === 'ayuda') {
       if (!hints.length) { say('No hints behind this door. You are on your own.'); return; }
       say('HINT ' + (hintIdx + 1) + '/' + hints.length + ' — ' + hints[hintIdx]);
       hintIdx = (hintIdx + 1) % hints.length; input.value = ''; return;
@@ -213,14 +236,14 @@
     var c = sha256('check|' + v);
     if (D.checks && D.checks[c]) {
       var next = hexxor(D.checks[c], sha256('mask|' + v).slice(0, 16));
-      S.set('ra_key_' + D.level, v);
+      if (!D.side) S.set('ra_key_' + D.level, v);
       say('The lock turns.', 'ok');
-      setTimeout(function () { location.href = './' + next + '.html'; }, 700);
+      setTimeout(function () { location.href = (D.dir || './') + next + '.html'; }, 700);
       return;
     }
     wrong++;
     var t = pick(WRONG);
-    if (wrong === 3) t += '  (psst: the box also understands the word "hint".)';
+    if (wrong === 2) t += '  (psst: the box also understands the word "hint".)';
     say(t, 'bad');
     input.select();
   });

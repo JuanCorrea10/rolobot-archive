@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>DOOR VI — The Rolobot Archive</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2307080a'/%3E%3Cpath d='M3 16c4-7 22-7 26 0-4 7-22 7-26 0z' fill='none' stroke='%23d9a441' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23d9a441'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+
+</head>
+<body>
+
+<main>
+<div class="kicker">THE ROLOBOT ARCHIVE &middot; DOOR VI OF X</div>
+<h1>The Elevator</h1>
+
+<p class="dim">You step into an old elevator. The display flickers.</p>
+<div class="display">FLOOR <span id="floorno">1</span></div>
+<div class="floors" id="floors"></div>
+<p id="floortxt"></p>
+<p class="dim">There is a floor the buttons never learned about. The address bar knows it.</p>
+<form class="key" id="keyform" autocomplete="off">
+  <input id="key" type="text" placeholder="key" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+  <button type="submit">TURN</button>
+</form>
+<div class="msg" id="msg"></div>
+<footer>By <a href="../about.html">Rolobot</a> &middot; <a href="../index.html">the archive</a></footer>
+</main>
+<noscript><p class="dim">This archive needs JavaScript. Every lock in it is a script.</p></noscript>
+<script>window.DOOR={"level":6,"checks":{"e605e962cfd2f7d3e4b1f2bb00ba78ff0867e9fb9a6ccd17ee822c891d40af34":"474ec9ac4b834e0d"},"hints":["TG9vayBhdCB0aGUgYWRkcmVzcyBiYXIgYWZ0ZXIgeW91IHByZXNzIGEgYnV0dG9uLiBUaGUgZmxvb3IgaXMgd3JpdHRlbiBpbiB0aGUgVVJMLg==","VGhlIGJ1dHRvbnMgc2tpcCBhIG51bWJlci4gV3JpdGUgdGhlIG1pc3Npbmcgb25lIGludG8gdGhlIGFkZHJlc3MgeW91cnNlbGYu","Q291bnQgdGhlIGJ1dHRvbnMuIFR3ZWx2ZS4uLiB0aGVuIGZvdXJ0ZWVuLiBUcnkgP2Zsb29yPTEzLg=="]};</script>
+<script src="../assets/archive.js"></script>
+<script>
+(function(){
+  var T = {
+    1:  'The lobby. A desk with nobody behind it. The elevator hums to itself.',
+    2:  'Offices. Every chair has been turned to face the wall.',
+    3:  'A long table set for twelve. The food is still warm.',
+    4:  'Storage. Boxes labelled DO NOT OPEN. All of them empty.',
+    5:  'A library. Every book has the same title: ARCHIVE.',
+    6:  'The lights do not work on this floor. Something is breathing.',
+    7:  'A swimming pool, drained. A single shoe at the bottom.',
+    8:  'Servers. Thousands of blinking lights. One of them is red.',
+    9:  'A room full of clocks. Each one shows a different time.',
+    10: 'Mirrors. You count your reflections. There is one too many.',
+    11: 'A greenhouse. Everything is dead except one plant. It turns to look at you.',
+    12: 'A door marked 13. It is painted on the wall.',
+    13: '<b>FLOOR 13.</b> This floor does not exist. The buttons never knew it; the architects denied it. And yet here you are, between twelve and fourteen, in a place with no walls and no way out. There is a word for a place like this. Welcome to <b>LIMBO</b>. Take its name with you. It is your key.',
+    14: 'The roof. From up here the whole archive looks like an eye.',
+    0:  'The basement. Scrawled on the wall: "Why do programmers prefer dark mode? Because light attracts bugs." Not a key. Just a joke.',
+    42: 'The answer to life, the universe and everything. Not, however, to this door.',
+    666: 'No.',
+    404: 'This floor could not be found.',
+    1337: 'Very clever. Still not the floor you want.'
+  };
+  var p = new URLSearchParams(location.search).get('floor');
+  var f = (p === null) ? 1 : (/^-?\d+$/.test(p.trim()) ? parseInt(p, 10) : NaN);
+  var txt;
+  if (isNaN(f)) txt = 'The elevator does not understand you. Floors are numbers.';
+  else if (T[f] !== undefined) txt = T[f];
+  else if (f < 0) txt = 'Underground. It is dark, it is wet, and nothing down here is a key. Go up.';
+  else txt = 'The elevator shudders and refuses. There is nothing above the roof.';
+  document.getElementById('floorno').textContent = isNaN(f) ? '?' : f;
+  document.getElementById('floortxt').innerHTML = txt;
+  var box = document.getElementById('floors'), h = '';
+  for (var i = 1; i <= 14; i++) {
+    if (i === 13) continue;
+    h += '<a href="?floor=' + i + '"' + (i === f ? ' class="here"' : '') + '>' + i + '</a>';
+  }
+  box.innerHTML = h;
+})();
+</script>
+</body>
+</html>

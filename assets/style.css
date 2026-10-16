@@ -1,0 +1,43 @@
+/* The Rolobot Archive — the paint on the walls. Nothing is hidden in here. Probably. */
+:root{--bg:#07080a;--fg:#9aa38b;--dim:#4d5447;--acc:#d9a441;--ok:#7fcf7f;--bad:#cf6f6f;--ink:#c9d1b9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:"Courier New",Consolas,"Lucida Console",monospace;font-size:16px;line-height:1.6}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
+main{max-width:640px;margin:0 auto;padding:48px 16px 96px;position:relative}
+h1{color:var(--acc);font-weight:normal;letter-spacing:.25em;font-size:1.15rem;text-transform:uppercase;margin:4px 0 28px;animation:flicker 7s infinite}
+.kicker{color:var(--dim);font-size:.75rem;letter-spacing:.3em}
+p{margin:14px 0}
+a{color:var(--acc)}
+em{color:var(--ink);font-style:italic}
+b{color:var(--acc);font-weight:normal;letter-spacing:.15em}
+.dim{color:var(--dim)}
+.small{font-size:.85rem}
+.carved{border-left:2px solid var(--dim);padding:8px 16px;margin:22px 0;letter-spacing:.12em;color:var(--ink);white-space:pre-wrap;font-family:inherit}
+pre.morse{font-size:1.15rem;letter-spacing:.1em;text-align:center;color:var(--ink);margin:8px 0 20px;overflow-x:auto}
+.ghost{color:var(--bg);text-decoration:none;transition:color 12s linear}
+.ghost::selection{background:var(--acc);color:#000}
+.ghost.faint{color:#1a1810}
+form.key{margin-top:34px;display:flex;gap:8px}
+input{flex:1;min-width:0;background:#0e1013;border:1px solid var(--dim);color:var(--ink);padding:10px 12px;font:inherit;outline:none;border-radius:0}
+input:focus{border-color:var(--acc)}
+button{background:transparent;border:1px solid var(--acc);color:var(--acc);padding:10px 16px;font:inherit;cursor:pointer;letter-spacing:.12em;border-radius:0}
+button:hover{background:var(--acc);color:#000}
+.msg{min-height:1.6em;margin-top:12px;color:var(--dim);white-space:pre-wrap}
+.msg.bad{color:var(--bad)}
+.msg.ok{color:var(--ok)}
+footer{margin-top:72px;color:var(--dim);font-size:.78rem;letter-spacing:.05em}
+footer a{color:var(--dim)}
+footer a:hover{color:var(--acc)}
+.eye{color:var(--dim);font-size:.7rem;line-height:1.15;margin:0 0 24px;overflow-x:auto}
+details{margin:28px 0;color:var(--dim);font-size:.9rem}
+summary{cursor:pointer;color:var(--fg)}
+.lamp{width:52px;height:52px;border-radius:50%;background:#15150f;box-shadow:0 0 0 2px #22221a;margin:28px auto 8px;transition:background .04s,box-shadow .04s}
+.lamp.on{background:#ffd66b;box-shadow:0 0 28px 6px rgba(255,176,0,.55)}
+.display{border:1px solid var(--dim);display:inline-block;padding:4px 14px;letter-spacing:.3em;color:var(--acc);margin:6px 0 14px}
+.floors a{display:inline-block;width:40px;height:40px;line-height:38px;text-align:center;border:1px solid var(--dim);margin:3px;text-decoration:none;color:var(--fg)}
+.floors a:hover{border-color:var(--acc);color:var(--acc)}
+.floors a.here{border-color:var(--acc);color:var(--acc);background:#15140d}
+#progress{margin-top:28px;color:var(--dim);font-size:.9rem}
+.keyring{color:var(--ink);letter-spacing:.08em;word-break:break-all}
+hr{border:0;border-top:1px solid #1a1c1f;margin:32px 0}
+@keyframes flicker{0%,96%,100%{opacity:1}97%{opacity:.35}98%{opacity:.9}99%{opacity:.5}}

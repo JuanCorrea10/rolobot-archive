@@ -1,4 +1,4 @@
 # The Rolobot Archive
 # Nothing for you here, keepers. The doors are for people.
 User-agent: *
-Disallow: /rolobot-archive/d/
+Disallow: /d/

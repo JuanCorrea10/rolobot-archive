@@ -39,3 +39,12 @@ summary{cursor:pointer;color:var(--fg)}
 iframe.spotify{border:0;border-radius:12px;width:100%;height:352px;margin:18px 0}
 hr{border:0;border-top:1px solid #1a1c1f;margin:32px 0}
 @keyframes flicker{0%,96%,100%{opacity:1}97%{opacity:.35}98%{opacity:.9}99%{opacity:.5}}
+/* --- the archive is broken --- */
+.glitch{position:relative;animation:flicker 7s infinite,glitchA 4s infinite}
+@keyframes glitchA{0%,90%,100%{text-shadow:none;transform:none}92%{text-shadow:-3px 0 #ff3b3b,3px 0 #39f;transform:translateX(2px) skewX(-6deg)}94%{text-shadow:3px 0 #ff3b3b,-3px 0 #39f;transform:translateX(-2px)}96%{text-shadow:none;transform:none}}
+body.tear::before{content:"";position:fixed;left:-5%;right:-5%;top:38%;height:3px;background:rgba(217,164,65,.55);transform:skewY(-2deg);pointer-events:none;opacity:0;animation:tear 9s infinite;z-index:2}
+@keyframes tear{0%,86%,100%{opacity:0;top:38%}88%{opacity:1;top:38%}90%{opacity:1;top:55%}91%{opacity:0;top:20%}93%{opacity:1;top:20%}94%{opacity:0}}
+body.tear::after{animation:scan 13s infinite}
+@keyframes scan{0%,95%,100%{background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}96%{background:repeating-linear-gradient(0deg,rgba(255,60,60,.12) 0 2px,transparent 2px 5px)}98%{background:repeating-linear-gradient(0deg,rgba(0,0,0,.5) 0 1px,transparent 1px 2px)}}
+.broken-status{border:1px dashed var(--bad);color:var(--bad);padding:10px 14px;margin-top:28px;font-size:.85rem;letter-spacing:.08em;line-height:1.7;animation:flicker 5s infinite}
+.broken-status a{color:inherit}

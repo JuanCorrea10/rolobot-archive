@@ -150,6 +150,20 @@
   // ---------- new version of the archive: old progress means nothing ----------
   if (S.get('ra_v') !== '2') { forget(); S.set('ra_v', '2'); }
 
+  // ---------- the archive is broken (someone else is in here) ----------
+  document.body.classList.add('tear');
+  var h1 = document.querySelector('h1'); if (h1) h1.classList.add('glitch');
+  var paras = [].slice.call(document.querySelectorAll('main p')).filter(function (el) { return !el.children.length && !el.classList.contains('carved') && el.textContent.length > 12; });
+  setInterval(function () {
+    if (document.hidden || Math.random() < 0.45 || !paras.length) return;
+    var el = paras[Math.floor(Math.random() * paras.length)]; if (el.getAttribute('data-busy')) return;
+    var orig = el.textContent, ch = orig.split(''); el.setAttribute('data-busy', '1');
+    for (var k = 0; k < 2 + Math.floor(Math.random() * 3); k++) { var i = Math.floor(Math.random() * ch.length); if (ch[i] !== ' ') ch[i] = '▒'; }
+    el.textContent = ch.join('');
+    setTimeout(function () { el.textContent = orig; el.removeAttribute('data-busy'); }, 350 + Math.random() * 700);
+  }, 2200);
+  setInterval(function () { if (document.hidden) return; var t = document.title; document.title = t.replace(/[aeio]/, '▒').replace(/[aeio]([^aeio]*)$/, '▒$1'); setTimeout(function () { if (!document.hidden) document.title = t; }, 600); }, 9000);
+
   // ---------- the tab misses you ----------
   var savedTitle = document.title;
   document.addEventListener('visibilitychange', function () {

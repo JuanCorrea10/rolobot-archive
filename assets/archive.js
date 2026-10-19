@@ -164,6 +164,54 @@
   }, 2200);
   setInterval(function () { if (document.hidden) return; var t = document.title; document.title = t.replace(/[aeio]/, '▒').replace(/[aeio]([^aeio]*)$/, '▒$1'); setTimeout(function () { if (!document.hidden) document.title = t; }, 600); }, 9000);
 
+  // ---------- the music box (broken) ----------
+  var SS = {
+    get: function (k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+  };
+  var au = null;
+  try { au = new Audio(ROOT + 'assets/musicbox.mp3?v=4'); au.loop = true; au.volume = 0.55; au.preload = 'auto'; } catch (e) { au = null; }
+  var snd = document.createElement('button'); snd.id = 'snd'; snd.type = 'button';
+  function sndLabel() { snd.textContent = (!au || au.paused) ? '♪ off' : '♪ on'; }
+  function resume() {
+    var t = +SS.get('ra_t') || 0; if (!t) return;
+    try { if (au.duration) au.currentTime = t % au.duration; else au.addEventListener('loadedmetadata', function () { try { au.currentTime = t % au.duration; } catch (e) {} }, { once: true }); } catch (e) {}
+  }
+  function play() { if (!au) return; resume(); var pr = au.play(); if (pr && pr.catch) pr.catch(function () { notResponding(); }); }
+  function notResponding() {
+    var o = document.getElementById('nr'); if (o) { o.hidden = false; return; }
+    o = document.createElement('div'); o.id = 'nr'; o.className = 'nr';
+    o.innerHTML = '<div class="nrbox"><div class="t">▒▒ THE ROLOBOT ARCHIVE IS NOT RESPONDING ▒▒</div><div>someone else is using it.</div><button type="button" id="nrgo">[ continue anyway ]</button><div class="dim small" style="margin-top:12px">(sound on)</div></div>';
+    document.body.appendChild(o);
+    document.getElementById('nrgo').addEventListener('click', function () { o.hidden = true; SS.set('ra_sound', 'on'); sndLabel(); play(); });
+  }
+  if (au) {
+    document.body.appendChild(snd); sndLabel();
+    au.addEventListener('play', sndLabel); au.addEventListener('pause', sndLabel);
+    snd.addEventListener('click', function () { if (SS.get('ra_sound') === 'off') { SS.set('ra_sound', 'on'); play(); } else { SS.set('ra_sound', 'off'); au.pause(); } sndLabel(); });
+    if (/[?&]quiet/.test(location.search)) SS.set('ra_sound', 'off');   // test hook
+    var pref = SS.get('ra_sound');
+    if (pref === 'on') play(); else if (pref !== 'off') notResponding();
+    setInterval(function () { if (!au.paused) SS.set('ra_t', String(au.currentTime)); }, 1000);
+    window.addEventListener('pagehide', function () { if (!au.paused) SS.set('ra_t', String(au.currentTime)); });
+  }
+
+  // ---------- the eye ----------
+  var eye = document.getElementById('eye');
+  if (eye) {
+    var frames = [0, 1, 2, 3].map(function (i) { var im = new Image(); im.src = ROOT + 'assets/eye_' + i + '.jpg?v=4'; return im.src; });
+    var cyc = 0;
+    (function tick() {
+      setTimeout(function () {
+        cyc++;
+        var f = cyc % 5 === 0 ? 3 : (Math.random() < 0.55 ? 1 : 2);
+        var dur = f === 3 ? 900 + Math.random() * 800 : 70 + Math.random() * 230;
+        eye.src = frames[f];
+        setTimeout(function () { eye.src = frames[0]; tick(); }, dur);
+      }, 1400 + Math.random() * 3200);
+    })();
+  }
+
   // ---------- the tab misses you ----------
   var savedTitle = document.title;
   document.addEventListener('visibilitychange', function () {
@@ -199,9 +247,52 @@
     S.del('ra_max'); S.del('ra_last'); S.del('ra_start');
   }
 
-  // ---------- doors ----------
+  // ---------- doors: sealed from the inside ----------
   var D = window.DOOR;
   if (!D) return;
+  sealPage(D);
+  return;
+
+  function corrupt(str, amt, seed) {
+    var out = '', x = seed || 7;
+    for (var i = 0; i < str.length; i++) {
+      x = (x * 1103515245 + 12345) & 0x7fffffff;
+      var c = str[i]; if (c === ' ' || c === '\n') { out += c; continue; }
+      var q = (x % 1000) / 1000;
+      out += q < amt ? (q < amt * 0.5 ? '▒' : '█') : c;
+    }
+    return out;
+  }
+  function sealPage(D) {
+    var k = document.querySelector('.kicker');
+    if (k) k.innerHTML = k.innerHTML + ' &middot; <span style="color:var(--bad)">SEALED FROM THE INSIDE</span>';
+    var main = document.querySelector('main'), seed = (D.level || 9) * 977;
+    var walker = document.createTreeWalker(main, NodeFilter.SHOW_TEXT, null), nodes = [], n;
+    while ((n = walker.nextNode())) {
+      if (n.parentNode.closest('footer,form,.msg,.kicker,h1,.broken-status')) continue;
+      if (n.nodeValue.trim().length < 2) continue;
+      nodes.push(n);
+    }
+    nodes.forEach(function (nd, i) { nd.nodeValue = corrupt(nd.nodeValue, 0.38, seed + i * 31); });
+    [].forEach.call(main.querySelectorAll('button:not([type=submit])'), function (b) { b.disabled = true; b.textContent = '[ BROKEN ]'; });
+    [].forEach.call(main.querySelectorAll('iframe'), function (f) { var p = document.createElement('p'); p.className = 'dim'; p.textContent = '[ something was playing here ]'; f.parentNode.replaceChild(p, f); });
+    var form = document.getElementById('keyform'), input = document.getElementById('key'), msg = document.getElementById('msg');
+    if (!form) return;
+    input.placeholder = 'sealed';
+    var tries = 0, SEAL = ['The lock is not here anymore.', 'Someone changed the keys.', 'The door does not answer you. It answers someone else now.', 'R. has the keys.', 'No.', 'You are typing into a wall.', 'That key used to mean something.'];
+    form.addEventListener('submit', function (e) {
+      e.preventDefault(); tries++;
+      var v = norm(input.value), t;
+      if (!v) t = 'Silence. Same as the door.';
+      else if (v === 'hint' || v === 'hints' || v === 'pista' || v === 'clue' || v === 'ayuda') t = 'There are no hints here anymore. Only the error page.';
+      else if (v === 'rolobot') t = 'He is not here either.';
+      else if (D.checks && D.checks[sha256('check|' + v)]) t = 'That WAS the key. The door is sealed from the inside. It does not matter anymore.';
+      else t = SEAL[(tries - 1) % SEAL.length];
+      if (tries % 3 === 0) t += '  (every door in here is locked. go where no door exists.)';
+      msg.textContent = t; msg.className = 'msg bad'; input.select();
+    });
+  }
+  /* --- everything below is how the doors used to work. --- */
   if (!D.side) {
     var max = +S.get('ra_max') || 0;
     if (D.level >= max) { S.set('ra_max', String(D.level)); S.set('ra_last', location.href.split('?')[0].split('#')[0]); }

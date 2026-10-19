@@ -48,3 +48,18 @@ body.tear::after{animation:scan 13s infinite}
 @keyframes scan{0%,95%,100%{background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}96%{background:repeating-linear-gradient(0deg,rgba(255,60,60,.12) 0 2px,transparent 2px 5px)}98%{background:repeating-linear-gradient(0deg,rgba(0,0,0,.5) 0 1px,transparent 1px 2px)}}
 .broken-status{border:1px dashed var(--bad);color:var(--bad);padding:10px 14px;margin-top:28px;font-size:.85rem;letter-spacing:.08em;line-height:1.7;animation:flicker 5s infinite}
 .broken-status a{color:inherit}
+/* --- not responding --- */
+.nr{position:fixed;inset:0;background:rgba(3,3,4,.97);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px}
+.nr[hidden]{display:none}
+.nrbox{max-width:460px;text-align:center;border:1px solid var(--bad);padding:26px 20px;color:var(--bad);letter-spacing:.08em;animation:flicker 3s infinite}
+.nrbox .t{margin-bottom:10px}
+.nrbox button{margin-top:18px;border-color:var(--bad);color:var(--bad)}
+.nrbox button:hover{background:var(--bad);color:#000}
+#snd{position:fixed;left:12px;bottom:12px;z-index:5;font-size:.75rem;padding:4px 10px;border-color:var(--dim);color:var(--dim);background:rgba(7,8,10,.85)}
+.eyewrap{margin:4px 0 26px;border:1px solid #1a1c1f;overflow:hidden;background:#000}
+.eyewrap img{display:block;width:100%;height:auto}
+ol.sealed{list-style:none;padding:0;margin:18px 0}
+ol.sealed li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed #1a1c1f;padding:6px 0;color:var(--dim)}
+ol.sealed s{color:var(--dim)}
+ol.sealed span{color:var(--bad);letter-spacing:.2em;font-size:.8rem;white-space:nowrap}
+img.stare{display:block;width:100%;height:auto;max-width:440px;margin:12px 0;border:1px solid #1a1c1f;opacity:.9}

@@ -35,19 +35,20 @@
 <p>Six doors. Each one wanted a key.</p>
 <p>Somebody else has the keys now.</p>
 <ol class="sealed">
-<li><s>I &middot; The Shifted Room</s><span>SEALED</span></li>
-<li><s>II &middot; The First Tape</s><span>SEALED</span></li>
-<li><s>III &middot; The Tilted Room</s><span>SEALED</span></li>
-<li><s>IV &middot; The Jukebox</s><span>SEALED</span></li>
-<li><s>V &middot; The Anthem</s><span>SEALED</span></li>
-<li><s>VI &middot; The Riddle Keeper</s><span>SEALED</span></li>
-<li><s>VII &middot; The Last Door</s><span>SEALED</span></li>
+<li class="locked"><s>I &middot; The Shifted Room</s><span>SEALED</span></li>
+<li class="locked"><s>II &middot; The First Tape</s><span>SEALED</span></li>
+<li class="locked"><s>III &middot; The Tilted Room</s><span>SEALED</span></li>
+<li class="locked"><s>IV &middot; The Jukebox</s><span>SEALED</span></li>
+<li class="locked"><s>V &middot; The Anthem</s><span>SEALED</span></li>
+<li class="locked"><s>VI &middot; The Riddle Keeper</s><span>SEALED</span></li>
+<li class="crack"><a href="d/the-last-door.html"><s>VII &middot; The Last Door</s></a><span id="crackstate">SEALED</span></li>
 </ol>
+<p class="dim small" id="sealmsg">&nbsp;</p>
 <p class="dim">The doors were locked from the inside. Nothing in here opens anymore. Nothing in here was ever supposed to.</p>
 <hr>
 <p class="dim small">By Rolobot. Built with nothing but HTML, CSS and a suspicious amount of JavaScript.</p>
 <div class="broken-status">&#9618;&#9618; ARCHIVE STATUS: COMPROMISED &#9618;&#9618;<br>last updated: January 1, 19100<br>the err&#9618;r page is n&#9618;t empty anym&#9618;re. <a href="19100.html">?</a></div>
-<footer>By <a href="./about.html">Rolobot</a> &middot; <a href="./index.html">the archive</a></footer>
+<footer>By <a class="z" href="./about.html">Rͪõl̒ǫ̂b̤̓o̖ͯt̔</a> &middot; <a href="./index.html">the archive</a></footer>
 </main>
 <noscript><p class="dim">This archive needs JavaScript. Every lock in it is a script.</p></noscript>
 <script src="assets/archive.js?v=4"></script>
@@ -56,6 +57,15 @@ console.log('%c' + "\n                _.-\"\"\"\"\"\"\"\"-._\n             .-'  
 console.log('%cHello, developer. You are early.\nThe first door is not in the console. It is on the page, in ink the colour of the dark.', 'color:#9aa38b;font-family:monospace');
 console.log('%csomeone else sees you.', 'color:#d9a441;font-family:monospace;font-size:13px');
 console.log('%cthe error page is not empty anymore. I did not do that. - R', 'color:#4d5447;font-family:monospace');
+(function () {
+  var msg = document.getElementById('sealmsg'), n = 0;
+  var SAY = ['sealed.', 'sealed from the inside.', 'this one will not move.', 'someone is holding it shut.', 'not this one.', 'GET OUT, the last one used to say.'];
+  [].forEach.call(document.querySelectorAll('ol.sealed li.locked'), function (li) {
+    li.addEventListener('click', function () { li.classList.remove('shake'); void li.offsetWidth; li.classList.add('shake'); msg.textContent = SAY[n++ % SAY.length]; });
+  });
+  var st = document.getElementById('crackstate'), F = ['SEALED', 'S\u2592ALED', 'OP\u2592N', 'SEALED', '\u2592\u2592\u2592\u2592\u2592\u2592'];
+  if (st) setInterval(function () { st.textContent = F[Math.floor(Math.random() * F.length)]; setTimeout(function () { st.textContent = 'SEALED'; }, 260); }, 2600);
+})();
 </script>
 </body>
 </html>

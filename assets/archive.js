@@ -170,9 +170,7 @@
     set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
   };
   var au = null;
-  try { au = new Audio(ROOT + 'assets/musicbox.mp3?v=4'); au.loop = true; au.volume = 0.55; au.preload = 'auto'; } catch (e) { au = null; }
-  var snd = document.createElement('button'); snd.id = 'snd'; snd.type = 'button';
-  function sndLabel() { snd.textContent = (!au || au.paused) ? '♪ off' : '♪ on'; }
+  try { au = new Audio(ROOT + 'assets/musicbox.mp3?v=5'); au.loop = true; au.volume = 0.55; au.preload = 'auto'; } catch (e) { au = null; }
   function resume() {
     var t = +SS.get('ra_t') || 0; if (!t) return;
     try { if (au.duration) au.currentTime = t % au.duration; else au.addEventListener('loadedmetadata', function () { try { au.currentTime = t % au.duration; } catch (e) {} }, { once: true }); } catch (e) {}
@@ -183,12 +181,9 @@
     o = document.createElement('div'); o.id = 'nr'; o.className = 'nr';
     o.innerHTML = '<div class="nrbox"><div class="t">▒▒ THE ROLOBOT ARCHIVE IS NOT RESPONDING ▒▒</div><div>someone else is using it.</div><button type="button" id="nrgo">[ continue anyway ]</button><div class="dim small" style="margin-top:12px">(sound on)</div></div>';
     document.body.appendChild(o);
-    document.getElementById('nrgo').addEventListener('click', function () { o.hidden = true; SS.set('ra_sound', 'on'); sndLabel(); play(); });
+    document.getElementById('nrgo').addEventListener('click', function () { o.hidden = true; SS.set('ra_sound', 'on'); play(); });
   }
   if (au) {
-    document.body.appendChild(snd); sndLabel();
-    au.addEventListener('play', sndLabel); au.addEventListener('pause', sndLabel);
-    snd.addEventListener('click', function () { if (SS.get('ra_sound') === 'off') { SS.set('ra_sound', 'on'); play(); } else { SS.set('ra_sound', 'off'); au.pause(); } sndLabel(); });
     if (/[?&]quiet/.test(location.search)) SS.set('ra_sound', 'off');   // test hook
     var pref = SS.get('ra_sound');
     if (pref === 'on') play(); else if (pref !== 'off') notResponding();

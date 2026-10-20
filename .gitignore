@@ -2,3 +2,4 @@
 _private/
 Thumbs.db
 .DS_Store
+.wrangler/

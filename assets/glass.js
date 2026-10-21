@@ -72,9 +72,9 @@
     for (i = 1; i <= 7; i++) { var rk = rng(500 + i), ex = []; for (j = 0; j < 2; j++) jag(rk, P.x, P.y, rk() * Math.PI * 2, (mobile ? 90 : 150) + rk() * (mobile ? 120 : 220), 11, 1, ex); extra.push(ex); }
     var blob = [], drips = [];
     for (i = 0; i < 40; i++) { var t = i / 40 * Math.PI * 2; blob.push([t, 0.72 + 0.18 * Math.sin(t * 3 + 1.3) + 0.1 * Math.sin(t * 7 + 0.4) + r() * 0.08]); }
-    for (i = 0; i < 3; i++) drips.push({ dx: (r() - 0.5) * 60, w: 5 + r() * 9, len: 60 + r() * (mobile ? 110 : 200) });
+    for (i = 0; i < 3; i++) drips.push({ dx: (r() - 0.5) * 60, w: 5 + r() * 9, len: mobile ? 25 + r() * 45 : 60 + r() * 200 });
     var cols = [], cc = ['#ff2bd6', '#2bff88', '#22e5ff', '#ffffff', '#ffd02b', '#8a5bff'];
-    for (i = 0; i < (mobile ? 3 : 7); i++) cols.push({ x: mobile ? P.x - 30 + r() * (W - P.x + 20) : P.x + (r() - 0.55) * 300, w: r() < 0.3 ? 2 : 1, c: cc[i % cc.length], a: 0.35 + r() * 0.4 });
+    for (i = 0; i < (mobile ? 3 : 7); i++) cols.push({ x: mobile ? P.x - 30 + r() * (W - P.x + 20) : P.x + (r() - 0.55) * 300, w: r() < 0.3 ? 2 : 1, c: cc[i % cc.length], a: mobile ? 0.18 + r() * 0.22 : 0.35 + r() * 0.4 });
     G = { lines: lines, poly: poly, shards: shards, peeks: peeks, extra: extra, blob: blob, drips: drips, cols: cols, band: P.y + 50 + r() * 40, seed: r };
   }
 
@@ -103,7 +103,7 @@
     d.globalAlpha = 1; var r = rng(7);
     for (var x = P.x - (mobile ? 120 : 230); x < W; x += 3 + r() * 9) { d.fillStyle = ['#ff2bd6', '#2bff88', '#22e5ff', '#fff', '#000'][Math.floor(r() * 5)]; d.globalAlpha = 0.25 + r() * 0.5; d.fillRect(x, G.band + (r() - 0.5) * 3, 2 + r() * 8, 2 + r() * 3); }
     d.globalAlpha = 1;
-    var B = (mobile ? 54 : 84) * grow, cx = P.x + 8, cy = P.y + 6;
+    var B = (mobile ? 46 : 84) * grow, cx = P.x + 8, cy = P.y + 6;
     c.save(); c.globalCompositeOperation = 'lighter';
     [['255,40,200', -0.7, 1.25], ['30,230,255', 2.2, 1.15], ['255,210,40', 1.1, 1.05], ['120,60,255', 3.6, 1.35]].forEach(function (q) {
       var B0 = Math.min(B, (mobile ? 54 : 84) * 1.35), x = cx + Math.cos(q[1]) * B0 * 0.8, y = cy + Math.sin(q[1]) * B0 * 0.8, rad = B0 * q[2], g = c.createRadialGradient(x, y, 0, x, y, rad);

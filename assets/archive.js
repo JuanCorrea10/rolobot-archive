@@ -279,11 +279,11 @@
       e.preventDefault(); tries++;
       var v = norm(input.value), t;
       if (!v) t = 'Silence. Same as the door.';
-      else if (v === 'hint' || v === 'hints' || v === 'pista' || v === 'clue' || v === 'ayuda') t = 'There are no hints here anymore. Only the error page.';
+      else if (v === 'hint' || v === 'hints' || v === 'pista' || v === 'clue' || v === 'ayuda') t = 'There are no hints here anymore. Only the glass.';
       else if (v === 'rolobot') t = 'He is not here either.';
       else if (D.checks && D.checks[sha256('check|' + v)]) t = 'That WAS the key. The door is sealed from the inside. It does not matter anymore.';
       else t = SEAL[(tries - 1) % SEAL.length];
-      if (tries % 3 === 0) t += '  (every door in here is locked. go where no door exists.)';
+      if (tries % 3 === 0) t += '  (every door in here is locked. the glass is not a door.)';
       msg.textContent = t; msg.className = 'msg bad'; input.select();
     });
   }

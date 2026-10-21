@@ -71,3 +71,29 @@ ol.sealed li.crack a:hover s{color:var(--acc)}
 .zal{line-height:2.6;color:var(--ink);overflow:visible;word-break:break-word;font-size:1.1rem}
 .zal.big{font-size:1.25rem;color:var(--bad)}
 img.stare{display:block;width:100%;height:auto;max-width:440px;margin:12px 0;border:1px solid #1a1c1f;opacity:.9}
+/* --- the glass (a un lado, la pantalla está rota) --- */
+#glass,#deadpx{position:fixed;left:0;top:0;pointer-events:none}
+#deadpx{z-index:3;animation:deadfl 6s infinite}
+#glass{z-index:5}
+@keyframes deadfl{0%,91%,100%{opacity:1}92%{opacity:.2}93%{opacity:1}95%{opacity:.5}96%{opacity:1}}
+.shk{animation:gshk .16s}
+.shk2{animation:gshk2 .12s}
+@keyframes gshk{25%{transform:translate(-3px,2px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,-1px)}}
+@keyframes gshk2{50%{transform:translate(1px,-1px)}}
+.heal{animation:gheal .52s steps(3)}
+@keyframes gheal{0%{opacity:1}30%{opacity:.25;filter:hue-rotate(90deg)}60%{opacity:.8;transform:translateX(4px)}100%{opacity:1}}
+.gflash{position:fixed;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.75),rgba(255,255,255,0) 60%);pointer-events:none;z-index:6;animation:gfl .3s forwards}
+.gflash.big{width:640px;height:640px;margin:-320px 0 0 -320px;animation-duration:.6s}
+@keyframes gfl{from{opacity:1;transform:scale(.6)}to{opacity:0;transform:scale(1.1)}}
+.gripple{position:fixed;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:1px solid rgba(220,230,245,.75);pointer-events:none;z-index:6;animation:grip .8s forwards}
+@keyframes grip{from{opacity:.9;transform:scale(.3)}to{opacity:0;transform:scale(2.4)}}
+.gshard{position:fixed;z-index:7;pointer-events:none;background:linear-gradient(135deg,rgba(70,76,88,.6),rgba(7,8,10,.97) 55%);transition:transform 1.6s cubic-bezier(.55,0,.95,.6),opacity 1.6s ease-in}
+.gshard canvas{display:block}
+.gshard.fall{transform:translate(40px,115vh) rotate(32deg);opacity:.2}
+.ghole{position:fixed;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;overflow:hidden}
+.ghole canvas{position:absolute;left:0;top:0}
+.ghole a{position:relative;line-height:0}
+.ghole img{width:176px;height:62px;image-rendering:pixelated;border:1px solid #fff;box-shadow:2px 2px 0 rgba(0,0,0,.4)}
+.ghole span{position:relative;font:bold 12px "Comic Sans MS","Chalkboard SE",cursive;color:#fff;text-shadow:1px 1px 0 #1a3a7a;text-align:center;padding:0 14px;letter-spacing:0}
+.ghole.small img{width:132px;height:47px}
+.ghole.small span{display:none}

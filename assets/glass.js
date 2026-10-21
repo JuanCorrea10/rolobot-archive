@@ -181,7 +181,13 @@
   }
 
   function fromBehind() { var i = 0; (function one() { if (broken || i++ >= 7) return; fx('gripple', P.x, P.y, 800); shake(true); setTimeout(one, 210); })(); }
-  if (sat) (function loop() { setTimeout(function () { if (!broken && !document.hidden && Date.now() - lastK > 6000) fromBehind(); loop(); }, has('sat') ? 3000 : 16000 + Math.random() * 12000); })();
+  function helpLoop() { (function loop() { setTimeout(function () { if (!broken && !document.hidden && Date.now() - lastK > 6000) fromBehind(); loop(); }, has('sat') ? 3000 : 16000 + Math.random() * 12000); })(); }
+  if (sat) helpLoop();
+  else if (!broken) {
+    var t0 = +LS.get('ra_t0') || 0; if (!t0) { t0 = Date.now(); LS.set('ra_t0', String(t0)); }
+    var wait = Math.max(0, 180000 - (Date.now() - t0));
+    setTimeout(function () { if (broken) return; window.GLASS.sat = true; fromBehind(); helpLoop(); }, wait);
+  }
 
   document.addEventListener('pointerdown', function (e) {
     if (broken || e.button > 0 || e.clientX == null) return;

@@ -97,7 +97,7 @@
   }
 
   function draw() {
-    var c = cv.getContext('2d'), d = dead.getContext('2d'), i, grow = 1 + Math.min(knocks, 7) * (mobile ? 0.05 : 0.11);
+    var c = cv.getContext('2d'), d = dead.getContext('2d'), i, grow = 1 + (broken ? 7 : 0) * (mobile ? 0.05 : 0.11);
     c.setTransform(DPR, 0, 0, DPR, 0, 0); d.setTransform(DPR, 0, 0, DPR, 0, 0); c.clearRect(0, 0, W, H); d.clearRect(0, 0, W, H);
     G.cols.forEach(function (k) { d.globalAlpha = k.a; d.fillStyle = k.c; d.fillRect(Math.round(k.x), 0, k.w, H); });
     d.globalAlpha = 1; var r = rng(7);
@@ -126,7 +126,7 @@
     });
     G.shards.forEach(function (s) { path(c, s.pts, true); c.fillStyle = s.blue ? 'rgba(150,190,255,' + s.a + ')' : 'rgba(255,255,255,' + s.a + ')'; c.fill(); });
     G.lines.forEach(function (L) { strokeCrack(c, L, false); });
-    for (i = 0; i < Math.min(knocks, 7); i++) G.extra[i].forEach(function (L) { strokeCrack(c, L, i === knocks - 1); });
+    if (broken) for (i = 0; i < 7; i++) G.extra[i].forEach(function (L) { strokeCrack(c, L, i === 6); });
     var rr = rng(3); c.fillStyle = 'rgba(230,236,245,.55)';
     for (i = 0; i < 70; i++) { var a = rr() * Math.PI * 2, dd = Math.pow(rr(), 2) * 16; c.fillRect(P.x + Math.cos(a) * dd, P.y + Math.sin(a) * dd, 1 + rr(), 1 + rr()); }
     if (broken) {
@@ -141,13 +141,10 @@
     var now = Date.now();
     if (now - lastK > 4000) knocks = 0;
     lastK = now; knocks++; clearTimeout(healT);
-    fx('gflash', P.x, P.y, 320); shake(false);
-    try { if (navigator.vibrate) navigator.vibrate(knocks >= 7 ? [30, 40, 60] : 15); } catch (e) {}
-    if (knocks >= 7) { shatter(true); return; }
-    draw();
-    healT = setTimeout(heal, 4000);
+    if (knocks >= 7) { fx('gflash', P.x, P.y, 320); shake(false); try { if (navigator.vibrate) navigator.vibrate([30, 40, 60]); } catch (e) {} shatter(true); return; }
+    fx('gtick', P.x, P.y, 260);
+    healT = setTimeout(function () { knocks = 0; }, 4000);
   }
-  function heal() { if (broken || !knocks) return; cv.classList.add('heal'); dead.classList.add('heal'); setTimeout(function () { knocks = 0; draw(); cv.classList.remove('heal'); dead.classList.remove('heal'); }, 520); }
 
   function box(el, poly) {
     var xs = poly.map(function (p) { return p[0]; }), ys = poly.map(function (p) { return p[1]; });

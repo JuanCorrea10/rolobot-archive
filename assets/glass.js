@@ -176,6 +176,7 @@
       fx('gflash big', P.x, P.y, 600);
     }
     draw(); showHole();
+    if (anim) { hole.style.pointerEvents = 'none'; setTimeout(function () { hole.style.pointerEvents = ''; }, 900); }
     if (sh) { requestAnimationFrame(function () { requestAnimationFrame(function () { sh.classList.add('fall'); }); }); setTimeout(function () { sh.remove(); }, 2300); }
   }
 

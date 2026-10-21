@@ -72,6 +72,7 @@ ol.sealed li.crack a:hover s{color:var(--acc)}
 .zal.big{font-size:1.25rem;color:var(--bad)}
 img.stare{display:block;width:100%;height:auto;max-width:440px;margin:12px 0;border:1px solid #1a1c1f;opacity:.9}
 /* --- the glass (a un lado, la pantalla está rota) --- */
+html{touch-action:manipulation}
 #glass,#deadpx{position:fixed;left:0;top:0;pointer-events:none}
 #deadpx{z-index:3;animation:deadfl 6s infinite}
 #glass{z-index:5}

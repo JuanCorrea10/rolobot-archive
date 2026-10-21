@@ -1,7 +1,7 @@
 /* the screen was fine yesterday.   - R */
 (function () {
   'use strict';
-  var CLUB = atob('aHR0cHM6Ly90aGVyaWRkbGVjbHViLnBhZ2VzLmRldg=='), SAT = Date.parse('2026-10-24T00:00:00-05:00');
+  var CLUB = atob('aHR0cHM6Ly90aGVyaWRkbGVjbHViLnBhZ2VzLmRldg=='), SAT = Date.parse('2026-10-24T00:00:00+02:00');
   var LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname), Q = location.search;
   function has(k) { return LOCAL && new RegExp('[?&]' + k + '(=|&|$)').test(Q); }
   function qnum(k) { var m = Q.match(new RegExp('[?&]' + k + '=(\\d+)')); return LOCAL && m ? +m[1] : 0; }

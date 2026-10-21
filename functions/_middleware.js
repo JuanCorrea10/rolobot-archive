@@ -1,6 +1,6 @@
 // Closed for maintenance until OPEN_AT. Every path gets the same calm page;
 // after that moment the archive is served as usual.
-const OPEN_AT = Date.parse('2026-10-23T00:00:00-05:00');
+const OPEN_AT = Date.parse('2026-10-23T00:00:00+02:00'); // viernes 00:00 en España (= jueves 22, 5 p.m. en Colombia)
 const PREVIEW = '45cd8b07105e3a36e908a1bf9b67d619acdac02084c67deb539b9da9c8e949be';
 
 const PAGE = `<!DOCTYPE html>

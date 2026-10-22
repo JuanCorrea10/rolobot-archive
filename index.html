@@ -60,11 +60,11 @@ console.log('%cHello, developer. You are early.\nThe first door is not in the co
 console.log('%csomeone else sees you.', 'color:#d9a441;font-family:monospace;font-size:13px');
 console.log('%cthe screen was fine yesterday. I did not do that. - R', 'color:#4d5447;font-family:monospace');
 (function () {
-  var msg = document.getElementById('sealmsg'), n = 0;
-  var HELP = ['sealed.', 'not the doors.', 'sealed from the inside.', 'not the doors. the glass.', 'someone is knocking. not on a door.', 'GET OUT, the last one used to say.'],
+  var msg = document.getElementById('sealmsg'), n = 0, was = null;
+  var HELP = ['not the doors. the glass.', 'someone is knocking. seven times.', 'sealed from the inside.', 'not the doors.', 'someone is knocking. seven times.', 'GET OUT, the last one used to say.'],
       PLAIN = ['sealed.', 'sealed from the inside.', 'this one will not move.', 'someone is holding it shut.', 'not this one.', 'GET OUT, the last one used to say.'];
   [].forEach.call(document.querySelectorAll('ol.sealed li.locked'), function (li) {
-    li.addEventListener('click', function () { var SAY = window.GLASS && window.GLASS.sat ? HELP : PLAIN; li.classList.remove('shake'); void li.offsetWidth; li.classList.add('shake'); msg.textContent = SAY[n++ % SAY.length]; });
+    li.addEventListener('click', function () { var h = !!(window.GLASS && window.GLASS.sat), SAY = h ? HELP : PLAIN; if (h !== was) { was = h; n = 0; } li.classList.remove('shake'); void li.offsetWidth; li.classList.add('shake'); msg.textContent = SAY[n++ % SAY.length]; });
   });
   var st = document.getElementById('crackstate'), F = ['SEALED', 'S\u2592ALED', 'OP\u2592N', 'SEALED', '\u2592\u2592\u2592\u2592\u2592\u2592'];
   if (st) setInterval(function () { st.textContent = F[Math.floor(Math.random() * F.length)]; setTimeout(function () { st.textContent = 'SEALED'; }, 260); }, 2600);
